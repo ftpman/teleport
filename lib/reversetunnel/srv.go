@@ -35,7 +35,6 @@ import (
 	"github.com/gravitational/teleport/lib/services"
 	"github.com/gravitational/teleport/lib/sshca"
 	"github.com/gravitational/teleport/lib/sshutils"
-	"github.com/gravitational/teleport/lib/state"
 	"github.com/gravitational/teleport/lib/utils"
 
 	"github.com/gravitational/trace"
@@ -100,7 +99,7 @@ type server struct {
 	clusterPeers map[string]*clusterPeers
 
 	// newAccessPoint returns new caching access point
-	newAccessPoint state.NewCachingAccessPoint
+	newAccessPoint auth.NewCachingAccessPoint
 
 	// cancel function will cancel the
 	cancel context.CancelFunc
@@ -143,7 +142,7 @@ type Config struct {
 	LocalAccessPoint auth.AccessPoint
 	// NewCachingAccessPoint returns new caching access points
 	// per remote cluster
-	NewCachingAccessPoint state.NewCachingAccessPoint
+	NewCachingAccessPoint auth.NewCachingAccessPoint
 	// DirectClusters is a list of clusters accessed directly
 	DirectClusters []DirectCluster
 	// Context is a signalling context
@@ -173,6 +172,9 @@ type Config struct {
 	// PollingPeriod specifies polling period for internal sync
 	// goroutines, used to speed up sync-ups in tests.
 	PollingPeriod time.Duration
+
+	// Component is a component used in logs
+	Component string
 }
 
 // CheckAndSetDefaults checks parameters and sets default values
@@ -208,6 +210,9 @@ func (cfg *Config) CheckAndSetDefaults() error {
 	if cfg.Clock == nil {
 		cfg.Clock = clockwork.NewRealClock()
 	}
+	if cfg.Component == "" {
+		cfg.Component = teleport.Component(teleport.ComponentProxy, teleport.ComponentServer)
+	}
 	return nil
 }
 
@@ -230,7 +235,7 @@ func NewServer(cfg Config) (Server, error) {
 		cancel:           cancel,
 		clusterPeers:     make(map[string]*clusterPeers),
 		Entry: log.WithFields(log.Fields{
-			trace.Component: teleport.ComponentReverseTunnelServer,
+			trace.Component: cfg.Component,
 		}),
 	}
 
@@ -502,7 +507,7 @@ func (s *server) HandleNewChan(conn net.Conn, sconn *ssh.ServerConn, nch ssh.New
 		nch.Reject(ssh.ConnectionFailed, msg)
 		return
 	}
-	s.Debugf("new tunnel from %s", sconn.RemoteAddr())
+	s.Debugf("New tunnel from %v.", sconn.RemoteAddr())
 	if sconn.Permissions.Extensions[extCertType] != extCertTypeHost {
 		s.Error(trace.BadParameter("can't retrieve certificate type in certType"))
 		return

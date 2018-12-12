@@ -426,15 +426,15 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:7fe2f0540c93189eb5c82b9dbd118d7f4f8ab9993101c3198ed6870bfadbf2e0"
+  digest = "1:a43816dbfa9fa218af700e9d230d1adbcef12ffc495efe46046a57fe5490aad0"
   name = "github.com/gravitational/trace"
   packages = [
     ".",
     "trail",
   ]
   pruneopts = "NUT"
-  revision = "3318e711adee0b3f48d3399ebf5aaddf329a2b4f"
-  version = "1.1.5"
+  revision = "5d6afe38af2b50a51fdf5c49714a628efbbb3161"
+  version = "1.1.6"
 
 [[projects]]
   digest = "1:869f0a997dcde348e34e5e11c619054fd29351a71fef4781c86cd2b82fbdd646"
@@ -1107,6 +1107,7 @@
     "github.com/docker/docker/pkg/term",
     "github.com/ghodss/yaml",
     "github.com/gogo/protobuf/gogoproto",
+    "github.com/gogo/protobuf/proto",
     "github.com/gogo/protobuf/types",
     "github.com/gokyle/hotp",
     "github.com/golang/protobuf/proto",
