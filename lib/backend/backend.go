@@ -144,6 +144,8 @@ const (
 	OpPut OpType = iota
 	// OpDelete is returned for Delete events
 	OpDelete OpType = iota
+	// OpGet is used for tracking, not present in the event stream
+	OpGet OpType = iota
 )
 
 // String returns user-friendly description of the operation
@@ -155,6 +157,8 @@ func (o OpType) String() string {
 		return "Put"
 	case OpDelete:
 		return "Delete"
+	case OpGet:
+		return "Get"
 	default:
 		return "unknown"
 	}

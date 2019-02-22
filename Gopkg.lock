@@ -456,6 +456,14 @@
   revision = "9cad4c3443a7200dd6400aef47183728de563a38"
 
 [[projects]]
+  digest = "1:67474f760e9ac3799f740db2c489e6423a4cde45520673ec123ac831ad849cb8"
+  name = "github.com/hashicorp/golang-lru"
+  packages = ["simplelru"]
+  pruneopts = "NUT"
+  revision = "20f1fb78b0740ba8c3cb143a61e86ba5c8669768"
+  version = "v0.5.0"
+
+[[projects]]
   branch = "master"
   digest = "1:b7f860847a1d71f925ba9385ed95f1ebc0abfeb418a78e219ab61f48fdfeffad"
   name = "github.com/howeyc/gopass"
@@ -662,23 +670,26 @@
   revision = "54653902c20e47f3417541d35435cb6d6162e28a"
 
 [[projects]]
-  digest = "1:3e5fd795ebf6a9e13e67d644da76130af7a6003286531f9573f8074c228b66a3"
+  digest = "1:00e5485f002096d8284d57ce59acb8e08121a5accdf92777ca7368bf9e5e18e8"
   name = "github.com/prometheus/client_golang"
-  packages = ["prometheus"]
+  packages = [
+    "prometheus",
+    "prometheus/internal",
+  ]
   pruneopts = "NUT"
-  revision = "c5b7fccd204277076155f10851dad72b76a49317"
-  version = "v0.8.0"
+  revision = "505eaef017263e299324067d40ca2c48f6a2cf50"
+  version = "v0.9.2"
 
 [[projects]]
   branch = "master"
-  digest = "1:32d10bdfa8f09ecf13598324dba86ab891f11db3c538b6a34d1c3b5b99d7c36b"
+  digest = "1:2d5cd61daa5565187e1d96bae64dbbc6080dacf741448e9629c64fd93203b0d4"
   name = "github.com/prometheus/client_model"
   packages = ["go"]
   pruneopts = "NUT"
-  revision = "6f3806018612930941127f2a7c6c453ba2c527d2"
+  revision = "fd36f4220a901265f90734c3183c5f0c91daa0b8"
 
 [[projects]]
-  digest = "1:8fcf11509894e854b6a197e99bf7aa50a43d853c461507d1c5597366737bfee7"
+  digest = "1:4e776079b966091d3e6e12ed2aaf728bea5cd1175ef88bb654e03adbf5d4f5d3"
   name = "github.com/prometheus/common"
   packages = [
     "expfmt",
@@ -686,14 +697,22 @@
     "model",
   ]
   pruneopts = "NUT"
-  revision = "50022896a67062a54a54f268fb6fe4bf90b34859"
+  revision = "cfeb6f9992ffa54aaa4f2170ade4067ee478b250"
+  version = "v0.2.0"
 
 [[projects]]
-  digest = "1:8828f36144cc87c0204378bc73f36dbdda8188e17cae5adaed263d22d0ac06ec"
+  branch = "master"
+  digest = "1:0a2e604afa3cbf53a1ddade2f240ee8472eded98856dd8c7cfbfea392ddbbfc7"
   name = "github.com/prometheus/procfs"
-  packages = ["."]
+  packages = [
+    ".",
+    "internal/util",
+    "iostats",
+    "nfs",
+    "xfs",
+  ]
   pruneopts = "NUT"
-  revision = "406e5b7bfd8201a36e2bb5f7bdae0b03380c2ce8"
+  revision = "e4d4a2206da023361ed100d85c5f2cf9c8364e9f"
 
 [[projects]]
   digest = "1:ebd11dba223a1ad42de8d1dd567c44016257aa642af4552c64d7db98cbb2d989"
@@ -1129,6 +1148,7 @@
     "github.com/gravitational/trace",
     "github.com/gravitational/trace/trail",
     "github.com/gravitational/ttlmap",
+    "github.com/hashicorp/golang-lru/simplelru",
     "github.com/jonboulle/clockwork",
     "github.com/json-iterator/go",
     "github.com/julienschmidt/httprouter",
@@ -1136,6 +1156,7 @@
     "github.com/kr/pty",
     "github.com/kylelemons/godebug/diff",
     "github.com/mailgun/lemma/secret",
+    "github.com/mailgun/minheap",
     "github.com/mailgun/timetools",
     "github.com/mailgun/ttlmap",
     "github.com/mattn/go-sqlite3",

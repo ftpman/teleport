@@ -305,6 +305,9 @@ var (
 	// without receiving a response from the client before the client is
 	// disconnected. The max count mirrors ClientAliveCountMax of sshd.
 	KeepAliveCountMax = 3
+
+	// TopRequestsCapacity sets up default top requests capacity
+	TopRequestsCapacity = 128
 )
 
 // Default connection limits, they can be applied separately on any of the Teleport

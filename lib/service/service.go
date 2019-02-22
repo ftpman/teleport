@@ -223,6 +223,9 @@ type TeleportProcess struct {
 	keyPairs map[keyPairKey]KeyPair
 	// keyMutex is a mutex to serialize key generation
 	keyMutex sync.Mutex
+
+	// reporter is used to report some in memory stats
+	reporter *backend.Reporter
 }
 
 type keyPairKey struct {
@@ -1445,6 +1448,19 @@ func (process *TeleportProcess) initDiagnosticService() error {
 		mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 	}
 
+	mux.HandleFunc("/top", func(w http.ResponseWriter, r *http.Request) {
+		if process.Config.Debug {
+			roundtrip.ReplyJSON(w, http.StatusNotFound, map[string]interface{}{"status": "turn on debugging mode to get top requests"})
+			return
+		}
+		reporter := process.getReporter()
+		if reporter == nil {
+			roundtrip.ReplyJSON(w, http.StatusNotFound, map[string]interface{}{"status": "reporter is not initialized"})
+			return
+		}
+		roundtrip.ReplyJSON(w, http.StatusOK, reporter.TopRequests())
+	})
+
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		roundtrip.ReplyJSON(w, http.StatusOK, map[string]interface{}{"status": "ok"})
 	})
@@ -2083,7 +2099,27 @@ func (process *TeleportProcess) initAuthStorage() (bk backend.Backend, err error
 	if err != nil {
 		return nil, trace.Wrap(err)
 	}
-	return backend.NewSanitizer(bk), nil
+	reporter, err := backend.NewReporter(backend.ReporterConfig{
+		Backend:          backend.NewSanitizer(bk),
+		TrackTopRequests: process.Config.Debug,
+	})
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+	process.setReporter(reporter)
+	return reporter, nil
+}
+
+func (process *TeleportProcess) setReporter(reporter *backend.Reporter) {
+	process.Lock()
+	defer process.Unlock()
+	process.reporter = reporter
+}
+
+func (process *TeleportProcess) getReporter() *backend.Reporter {
+	process.Lock()
+	defer process.Unlock()
+	return process.reporter
 }
 
 // WaitWithContext waits until all internal services stop.
